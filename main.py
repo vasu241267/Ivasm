@@ -1,26 +1,27 @@
+import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 import time
 from telegram import Bot
 import threading
 from flask import Flask
-import os
-print("Check chromedriver exists:", os.path.exists("/usr/lib/chromium/chromedriver"))
 
-# Config (Move to environment variables in prod)
-TELEGRAM_BOT_TOKEN = '7311288614:AAHecPFp5NnBrs4dJiR_l9lh1GB3zBAP_Yo'
-TELEGRAM_CHAT_ID = '-1002445692794'
+# Config from environment variables
+TELEGRAM_BOT_TOKEN = "8049406807:AAGhuUh9fOm5wt7OvTobuRngqY0ZNBMxlHE"
+TELEGRAM_CHAT_ID = "-1002311125652"
 IVAS_URL = 'https://ivasms.com/panel/login'
-IVAS_USERNAME = 'imdigitalvasu@gmail.com'
-IVAS_PASSWORD = '@Vasu2412'
+IVAS_USERNAME = "imdigitalvasu@gmail.com"
+IVAS_PASSWORD = "@Vasu2412"
+
+# Debug: Check Chromedriver existence
+print("Check chromedriver exists:", os.path.exists("/usr/bin/chromedriver"))
 
 # Telegram Bot
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
 
 def start_driver():
     chrome_options = Options()
@@ -29,7 +30,8 @@ def start_driver():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.binary_location = "/usr/bin/chromium"
 
-    service = Service("/usr/lib/chromium/chromedriver")
+    # Use webdriver-manager to get the correct Chromedriver
+    service = Service(ChromeDriverManager().install())
 
     return webdriver.Chrome(service=service, options=chrome_options)
 
@@ -43,7 +45,11 @@ def login_to_panel(driver):
 def get_latest_otp(driver):
     driver.get("https://ivasms.com/panel/inbox")
     time.sleep(3)
-    otp_text = driver.find_element(By.CSS_SELECTOR, ".otp-message-class").text  # Update this!
+    # Fallback to a more robust selector if .otp-message-class fails
+    try:
+        otp_text = driver.find_element(By.CSS_SELECTOR, ".otp-message-class").text
+    except:
+        otp_text = driver.find_element(By.XPATH, "//*[contains(text(), 'OTP')]").text
     return otp_text
 
 def format_otp_message(raw_otp):
