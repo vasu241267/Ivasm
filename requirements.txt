@@ -1,0 +1,4 @@
+flask
+undetected-chromedriver
+selenium
+python-telegram-bot==13.15
