@@ -18,8 +18,6 @@ IVAS_PASSWORD = '@Vasu2412'
 
 # Telegram Bot
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
-from selenium.webdriver.chrome.service import Service
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -34,7 +32,6 @@ def start_driver():
     service = Service("/usr/lib/chromium/chromedriver")
 
     return webdriver.Chrome(service=service, options=chrome_options)
-
 
 def login_to_panel(driver):
     driver.get(IVAS_URL)
