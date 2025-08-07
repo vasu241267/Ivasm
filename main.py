@@ -6,6 +6,8 @@ import time
 from telegram import Bot
 import threading
 from flask import Flask
+import os
+print("Check chromedriver exists:", os.path.exists("/usr/lib/chromium/chromedriver"))
 
 # Config (Move to environment variables in prod)
 TELEGRAM_BOT_TOKEN = '7311288614:AAHecPFp5NnBrs4dJiR_l9lh1GB3zBAP_Yo'
@@ -20,6 +22,7 @@ from selenium.webdriver.chrome.service import Service
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 
 def start_driver():
     chrome_options = Options()
@@ -28,8 +31,7 @@ def start_driver():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.binary_location = "/usr/bin/chromium"
 
-    # Correct path
-    service = Service("/usr/lib/chromium-browser/chromedriver")
+    service = Service("/usr/lib/chromium/chromedriver")
 
     return webdriver.Chrome(service=service, options=chrome_options)
 
