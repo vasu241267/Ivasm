@@ -18,6 +18,9 @@ IVAS_PASSWORD = '@Vasu2412'
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
 from selenium.webdriver.chrome.service import Service
 
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+
 def start_driver():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
@@ -25,9 +28,10 @@ def start_driver():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.binary_location = "/usr/bin/chromium"
 
-    service = Service("/usr/lib/chromium/chromedriver")
-    return webdriver.Chrome(service=service, options=chrome_options)
+    # Correct path
+    service = Service("/usr/lib/chromium-browser/chromedriver")
 
+    return webdriver.Chrome(service=service, options=chrome_options)
 
 
 def login_to_panel(driver):
